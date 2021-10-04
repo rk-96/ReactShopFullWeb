@@ -6,17 +6,16 @@ import cookie from 'cookie';
 export default function ProductPage({ data }) {
     return (
         <Layout>
-            {data[0]}
             <div className="card mb-3" >
                 <div className="row g-0">
                     <div className="col-md-4">
-                        <img src={data.image} className="img-fluid rounded-start" alt={data.title} />
+                        <img src={data.data[0].image} className="img-fluid rounded-start" alt={data.data[0].title} />
                     </div>
                     <div className="col-md-8">
                         <div className="card-body">
-                            <h5 className="card-title">{data.title}</h5>
-                            <p className="card-text">{data.description}</p>
-                            <p className="card-text">${data.price}</p>
+                            <h5 className="card-title">{data.data[0].title}</h5>
+                            <p className="card-text">{data.data[0].description}</p>
+                            <p className="card-text">${data.data[0].price}</p>
                         </div>
                     </div>
                 </div>
@@ -28,12 +27,18 @@ export default function ProductPage({ data }) {
 export async function getServerSideProps(context) {
 
     const { req } = context;
+    console.clear();
     if (!req.headers.cookie) {
+        console.clear();
+
         const { res } = context;
         res.writeHead(301, { Location: "/login" });
         res.end();
         return true;
+
     } else {
+        console.clear();
+
         const { token } = cookie.parse(req.headers.cookie);
         const profile = await checkLogin(token);
 
@@ -43,6 +48,7 @@ export async function getServerSideProps(context) {
             res.end();
             return true;
         }
+
     }
 
     let url = "http://localhost:3000/api/products/";
@@ -51,9 +57,11 @@ export async function getServerSideProps(context) {
             apikey: 'e555396ad0e7f074d62b90c5862b9e42'
         }
     };
-    const res = await axios.get(url + context.params.id, header);
+
+    const res = await axios.get(url + context.params.id , header);
     const data = res.data;
-    console.log(res);
+    console.clear();
+    console.log(data.data[0]);
     return {
         props: {
             data
