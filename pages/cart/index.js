@@ -35,7 +35,7 @@ export default function CartPage() {
                 <tbody>
                     {data.map((prod) => (
                         <tr>
-                            <th scope="row">{prod.title}</th>
+                            <th scope="row" key={todo.id}>{prod.title}</th>
                             <td>{prod.price}</td>
                             <td>{prod.quantity}</td>
                             <td>{prod.price * prod.quantity}</td>
